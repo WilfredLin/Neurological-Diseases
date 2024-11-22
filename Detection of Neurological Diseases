@@ -1,0 +1,49 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
+
+# Sample dataset loading function (replace with actual data)
+def load_data():
+    # For demonstration, we create a dummy dataset with major neurological disease symptoms
+    data = {
+        'age': [25, 30, 45, 50, 65, 70, 80, 35, 55, 40, 60, 75, 85],
+        'memory_loss': [1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0],
+        'difficulty_speaking': [0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1],
+        'muscle_weakness': [1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1],
+        'seizures': [0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1],
+        'coordination_problems': [1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0],
+        'diagnosis': [0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0]  # 0: No disease, 1: Disease detected
+    }
+    return pd.DataFrame(data)
+
+# Function to train and evaluate the model
+def detect_neurological_disease():
+    # Load the dataset
+    df = load_data()
+    
+    # Feature selection
+    X = df[['age', 'memory_loss', 'difficulty_speaking', 'muscle_weakness', 'seizures', 'coordination_problems']]
+    y = df['diagnosis']
+    
+    # Split the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    # Initialize the Random Forest Classifier
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    
+    # Train the model
+    model.fit(X_train, y_train)
+    
+    # Make predictions
+    y_pred = model.predict(X_test)
+    
+    # Evaluate the model
+    accuracy = accuracy_score(y_test, y_pred)
+    report = classification_report(y_test, y_pred)
+    
+    print(f"Accuracy: {accuracy:.2f}")
+    print("Classification Report:\n", report)
+
+# Run the disease detection program
+detect_neurological_disease()
